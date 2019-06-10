@@ -1,0 +1,29 @@
+{
+    "name": "tsuijie/php-grok",
+    "description": "Logstash Grok compatible log parser for PHP.",
+    "homepage": "https://github.com/tsuijie/php-grok",
+    "authors": [
+        {
+            "name": "Tsui Jie",
+            "email": "jndion2014@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tsuijie\\PHPGrok\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
