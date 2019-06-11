@@ -8,7 +8,13 @@ class Grok
 {
     protected $patterns = [];
 
-    public function match($pattern, $subject)
+    /**
+     * Match subject against given grok pattern.
+     * @param $pattern
+     * @param $subject
+     * @return array
+     */
+    public function match($pattern, $subject) : array
     {
         $matches = [];
         $named = [];
@@ -28,8 +34,10 @@ class Grok
      * example: %{PATTERN}
      * example with name: %{PATTERN:name}
      * example with value type (which does not serve any purpose here): %{PATTERN:name:int}
+     * @param $pattern
+     * @return string
      */
-    public function compile($pattern)
+    public function compile($pattern) : string
     {
         preg_match_all('/%{(\w+(?::\w+(?::\w+)?)?)}/', $pattern, $matches);
         
@@ -44,7 +52,7 @@ class Grok
             }
             $compiled = $this->compile($this->patterns[$key]);
             $name = isset($item[1]) ? $item[1] : null;
-            $replace = $name ? "(?<$name>$normalized)" : "($normalized)";
+            $replace = $name ? "(?<$name>$compiled)" : "($compiled)";
             $pattern = str_replace($matches[0][$i], $replace, $pattern);
         }
 
@@ -53,8 +61,10 @@ class Grok
 
     /**
      * Note that duplicate patterns will be replaced without warning!
+     * @param $name
+     * @param $pattern
      */
-    public function addPattern($name, $pattern)
+    public function addPattern($name, $pattern) : void
     {
         $this->patterns[$name] = $pattern;
     }
@@ -63,8 +73,9 @@ class Grok
      * Load pattern templates from file or directory.
      * Default patterns directory is used when path is set empty, see https://github.com/logstash-plugins/logstash-patterns-core
      * Note that duplicate patterns will be replaced without warning!
+     * @param $path
      */
-    public function addPatternsFromPath($path = '')
+    public function addPatternsFromPath($path = '') : void
     {
         // default patterns directory is used when path is empty.
         if (empty($path)) $path = __DIR__ . '/patterns';
@@ -75,7 +86,7 @@ class Grok
         } else if (is_file($path)) {
             $files = [$path];
         } else {
-            throw new Exception('Cannot load patterns, file or directory not exist.');
+            throw new Exception("Cannot load patterns, target path [$path] not exist.");
         }
 
         foreach ($files as $path) {
@@ -94,8 +105,10 @@ class Grok
 
     /**
      * Iterate files from directories.
+     * @param $dir
+     * @return array
      */
-    private function iterateThroughDirectory($dir)
+    private function iterateThroughDirectory($dir) : array
     {
         $files = [];
 
